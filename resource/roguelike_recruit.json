@@ -12,15 +12,16 @@
     ],
     "Warrior": [
         {
-            "name": "帕拉斯",
-            "level": 6,
-            "skill": 1
-        },
-        {
             "name": "山",
             "level": 6,
             "skill": 2,
             "skill_usage": 2
+        },
+        {
+            "name": "棘刺",
+            "level": 6,
+            "skill": 3,
+            "alternate_skill": 2
         },
         {
             "name": "煌",
@@ -28,7 +29,17 @@
             "skill": 2
         },
         {
+            "name": "史尔特尔",
+            "level": 6,
+            "skill": 2
+        },
+        {
             "name": "艾丽妮",
+            "level": 6,
+            "skill": 1
+        },
+        {
+            "name": "帕拉斯",
             "level": 6,
             "skill": 1
         },
@@ -51,11 +62,6 @@
             "name": "阿米娅",
             "level": 5,
             "skill": 1
-        },
-        {
-            "name": "史尔特尔",
-            "level": 6,
-            "skill": 2
         },
         {
             "name": "银灰",
@@ -102,12 +108,6 @@
             "name": "星极",
             "level": 5,
             "skill": 2
-        },
-        {
-            "name": "棘刺",
-            "level": 6,
-            "skill": 3,
-            "alternate_skill": 2
         },
         {
             "name": "柏喙",
@@ -247,6 +247,11 @@
     ],
     "Pioneer": [
         {
+            "name": "桃金娘",
+            "level": 4,
+            "skill": 1
+        },
+        {
             "name": "风笛",
             "level": 6,
             "skill": 2
@@ -330,11 +335,6 @@
         {
             "name": "极境",
             "level": 5,
-            "skill": 1
-        },
-        {
-            "name": "桃金娘",
-            "level": 4,
             "skill": 1
         },
         {
@@ -503,6 +503,22 @@
     ],
     "Sniper": [
         {
+            "name": "克洛丝",
+            "level": 3,
+            "skill": 1
+        },
+        {
+            "name": "能天使",
+            "level": 6,
+            "skill": 3,
+            "alternate_skill": 1
+        },
+        {
+            "name": "黑",
+            "level": 6,
+            "skill": 3
+        },
+        {
             "name": "蓝毒",
             "level": 5,
             "skill": 1
@@ -522,12 +538,6 @@
             "name": "白金",
             "level": 5,
             "skill": 2
-        },
-        {
-            "name": "能天使",
-            "level": 6,
-            "skill": 3,
-            "alternate_skill": 1
         },
         {
             "name": "埃拉托",
@@ -591,19 +601,9 @@
             "skill": 3
         },
         {
-            "name": "黑",
-            "level": 6,
-            "skill": 3
-        },
-        {
             "name": "安比尔",
             "level": 4,
             "skill": 2
-        },
-        {
-            "name": "克洛丝",
-            "level": 3,
-            "skill": 1
         },
         {
             "name": "Stormeye",
@@ -860,6 +860,11 @@
     ],
     "Special": [
         {
+            "name": "归溟幽灵鲨",
+            "level": 6,
+            "skill": 1
+        },
+        {
             "name": "孑",
             "level": 4,
             "skill": 2
@@ -966,11 +971,6 @@
             "skill": 1
         },
         {
-            "name": "归溟幽灵鲨",
-            "level": 6,
-            "skill": 1
-        },
-        {
             "name": "霜华_N",
             "level": 5,
             "skill": 1
@@ -998,6 +998,11 @@
     ],
     "Medic": [
         {
+            "name": "白面鸮",
+            "level": 5,
+            "skill": 2
+        },
+        {
             "name": "凯尔希",
             "level": 6,
             "skill": 3,
@@ -1006,11 +1011,6 @@
         {
             "name": "夜莺",
             "level": 6,
-            "skill": 2
-        },
-        {
-            "name": "白面鸮",
-            "level": 5,
             "skill": 2
         },
         {
@@ -1122,6 +1122,11 @@
     ],
     "Support": [
         {
+            "name": "浊心斯卡蒂",
+            "level": 6,
+            "skill": 2
+        },
+        {
             "name": "令",
             "level": 6,
             "skill": 3,
@@ -1172,11 +1177,6 @@
             "name": "梓兰",
             "level": 3,
             "skill": 1
-        },
-        {
-            "name": "浊心斯卡蒂",
-            "level": 6,
-            "skill": 2
         },
         {
             "name": "月禾",

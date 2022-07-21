@@ -29,7 +29,7 @@ Recognize the percentage of the Morale progress bar. When Morale decreases beyon
 
 #### Note
 
-- The shifting strategy is based on the optimal solution within a single facility instead of multiple facilities. Combination such as: `Shamare+Tequila`, `Vermeil+Scene` within a single facility can be recognized correctly; while combination like `Rosmontis`, `Pinus Sylvestris` among facilities is not supported yet.
+- The shifting strategy is based on the optimal solution within a single facility instead of multiple facilities. Combination such as: `Shamare-Tequila`, `Vermeil-Scene` within a single facility can be recognized correctly; while combination like `Rosmontis`, `Pinus Sylvestris` among facilities is not supported yet.
 - If `Usage of Drone` is selected with the option `Trading Post-LMD`, it will recognize `Shamare` and reserve it for her.
 - Operators of corresponding fraction will be selected when only one Clue is needed Reception Room; otherwise general operators will be chosen.
 - Reception Room will send out Clues only when your Clues are full. Three Clues will be send out at most. You can edit `SelectClue` - `maxTimes` field in `resource/tasks.json` to edit number of Clues sent if you want.
@@ -74,6 +74,7 @@ Welcome to QQ Group: 912322156
 ### Miscellaneous
 
 - Tasks order can be changed on the UI. So can the shifting order in the infrastructure.
+- Almost all configuration changes will be saved automatically, except for options containing an *.
 - All clicking event is randomized within a region, following Poisson distribution (higher probability at the center, lower probability around).
 - Developed in C++, the core algorithm supports multi-level cache, in order to reduce CPU and memory usage as much as possible.
 - Our software supports auto-update ✿✿ヽ(°▽°)ノ✿ Beta-testers can try beta versions, which updates faster and less buggy (maybe).

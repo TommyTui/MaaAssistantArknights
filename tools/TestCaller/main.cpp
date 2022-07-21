@@ -5,18 +5,22 @@
 #include <stdio.h>
 #include <string>
 
-std::string get_cur_dir()
+int main([[maybe_unused]] int argc, char** argv)
 {
-    return std::filesystem::current_path().u8string();
-}
+    // 这里默认读取的是可执行文件同目录下 resource 文件夹里的资源
+    const char* str_exec_path = argv[0];
+    const auto cur_path = std::filesystem::path(str_exec_path).parent_path();
 
-int main(/*int argc, char** argv*/)
-{
-    // 若使用 VS，请先设置 TestCaller 属性-调试-工作目录为 $(TargetDir)
-    AsstLoadResource(get_cur_dir().c_str());
+    bool loaded = AsstLoadResource(cur_path.string().c_str());
 
     // 增量更新国际服的资源
-    //AsstLoadResource((get_cur_dir() + R"(/resource/international/US)").c_str());
+    //const auto en_path = cur_path / "resource" / "global" / "YoStarEN";
+    //loaded &= AsstLoadResource(en_path.string().c_str());
+
+    if (!loaded) {
+        std::cout << "load resource failed" << std::endl;
+        return -1;
+    }
 
     auto ptr = AsstCreate();
     if (ptr == nullptr) {
@@ -24,7 +28,7 @@ int main(/*int argc, char** argv*/)
         return -1;
     }
 
-    bool connected = AsstConnect(ptr, "adb", "127.0.0.1:5555", "DEBUG");
+    bool connected = AsstConnect(ptr, "adb", "127.0.0.1:5555", nullptr);
     if (!connected) {
         std::cerr << "connect failed" << std::endl;
         AsstDestroy(ptr);
@@ -35,32 +39,32 @@ int main(/*int argc, char** argv*/)
 
     /* 详细参数可参考 docs / 集成文档.md */
 
-    //AsstAppendTask(ptr, "StartUp", nullptr);
+    AsstAppendTask(ptr, "StartUp", nullptr);
 
-//    AsstAppendTask(ptr, "Fight", R"(
-//{
-//    "stage": "CE-5"
-//}
-//    )");
+    AsstAppendTask(ptr, "Fight", R"(
+    {
+        "stage": "1-7"
+    }
+    )");
 
-    //    AsstAppendTask(ptr, "Recruit", R"(
+    //AsstAppendTask(ptr, "Recruit", R"(
     //{
     //    "select":[4],
     //    "confirm":[3,4],
     //    "times":4
     //}
-    //    )");
-    //
-    //    AsstAppendTask(ptr, "Infrast", R"(
+    //)");
+
+    //AsstAppendTask(ptr, "Infrast", R"(
     //{
     //    "facility": ["Mfg", "Trade", "Power", "Control", "Reception", "Office", "Dorm"],
     //    "drones": "Money"
     //}
     //)");
-    //
-    //    AsstAppendTask(ptr, "Visit", nullptr);
-    //
-    //    AsstAppendTask(ptr, "Mall", R"(
+
+    //AsstAppendTask(ptr, "Visit", nullptr);
+
+    //AsstAppendTask(ptr, "Mall", R"(
     //{
     //    "shopping": true,
     //    "buy_first": [
@@ -72,18 +76,19 @@ int main(/*int argc, char** argv*/)
     //    ]
     //}
     //)");
-    //    AsstAppendTask(ptr, "Award", nullptr);
-    //
-    //  AsstAppendTask(ptr, "Roguelike", nullptr);
 
-    AsstAppendTask(ptr, "Debug", nullptr);
+    //AsstAppendTask(ptr, "Award", nullptr);
 
-    //    AsstAppendTask(ptr, "Copilot", R"(
+    //AsstAppendTask(ptr, "Roguelike", nullptr);
+
+    //AsstAppendTask(ptr, "Copilot", R"(
     //{
     //    "stage_name": "如帝国之影",
     //    "formation": true
     //}
     //)");
+
+    //AsstAppendTask(ptr, "Debug", nullptr);
 
     AsstStart(ptr);
 

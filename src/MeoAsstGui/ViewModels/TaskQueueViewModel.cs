@@ -66,6 +66,8 @@ namespace MeoAsstGui
             LogItemViewModels = new ObservableCollection<LogItemViewModel>();
             InitializeItems();
             InitTimer();
+            var trayIcon = _container.Get<TrayIcon>();
+            trayIcon.SetTaskQueueViewModel(this);
         }
 
         //public void ShowButton()
@@ -136,8 +138,8 @@ namespace MeoAsstGui
                 new GenericCombData<ActionType>{ Display="关闭模拟器",Value=ActionType.ExitEmulator },
                 new GenericCombData<ActionType>{ Display="退出并关闭模拟器",Value=ActionType.ExitEmulatorAndSelf },
                 //new GenericCombData<ActionTypeAfterCompleted>{ Display="待机",Value=ActionTypeAfterCompleted.Suspend },
-                new GenericCombData<ActionType>{ Display="休眠",Value=ActionType.Hibernate },
-                new GenericCombData<ActionType>{ Display="关机",Value=ActionType.Shutdown },
+                new GenericCombData<ActionType>{ Display="休眠*",Value=ActionType.Hibernate },
+                new GenericCombData<ActionType>{ Display="关机*",Value=ActionType.Shutdown },
             };
             var temp_order_list = new List<DragItemViewModel>(new DragItemViewModel[task_list.Length]);
             int order_offset = 0;
@@ -169,11 +171,6 @@ namespace MeoAsstGui
                 new CombData { Display = "当前关卡", Value = string.Empty },
                 new CombData { Display = "上次作战", Value = "LastBattle" },
 
-                // SideStory「绿野幻梦」活动
-                new CombData { Display = "DV-6", Value = "DV-6" },
-                new CombData { Display = "DV-7", Value = "DV-7" },
-                new CombData { Display = "DV-8", Value = "DV-8" },
-
                 new CombData { Display = "1-7", Value = "1-7" },
                 new CombData { Display = "龙门币-6/5", Value = "CE-6" },
                 new CombData { Display = "红票-5", Value = "AP-5" },
@@ -189,17 +186,22 @@ namespace MeoAsstGui
                 new CombData { Display = "近/特芯片", Value = "PR-D-1" },
                 new CombData { Display = "近/特芯片组", Value = "PR-D-2" },
 
+                // SideStory「绿野幻梦」活动
+                // new CombData { Display = "DV-6", Value = "DV-6" },
+                // new CombData { Display = "DV-7", Value = "DV-7" },
+                // new CombData { Display = "DV-8", Value = "DV-8" },
+
                 // SideStory「尘影余音」活动
                 // new CombData { Display = "LE-7", Value = "LE-7" },
                 // new CombData { Display = "LE-6", Value = "LE-6" },
                 // new CombData { Display = "LE-5", Value = "LE-5" },
 
-                // “愚人号” 活动关卡
+                // SideStory「愚人号」活动关卡
                 //new CombData { Display = "SN-8", Value = "SN-8" },
                 //new CombData { Display = "SN-9", Value = "SN-9" },
                 //new CombData { Display = "SN-10", Value = "SN-10" },
 
-                //// “风雪过境” 活动关卡
+                // SideStory「风雪过境」活动关卡
                 //new CombData { Display = "BI-7", Value = "BI-7" },
                 //new CombData { Display = "BI-8", Value = "BI-8" }
             };
@@ -352,13 +354,136 @@ namespace MeoAsstGui
             }
         }
 
+        private bool _inverseMode = Convert.ToBoolean(ViewStatusStorage.Get("MainFunction.InverseMode", bool.FalseString));
+
+        public bool InverseMode
+        {
+            get
+            {
+                return _inverseMode;
+            }
+            set
+            {
+                SetAndNotify(ref _inverseMode, value);
+                InverseShowText = value ? "反选" : "清空";
+                InverseMenuText = value ? "清空" : "反选";
+                ViewStatusStorage.Set("MainFunction.InverseMode", value.ToString());
+            }
+        }
+
+        private int _selectedAllWidth =
+            ViewStatusStorage.Get("GUI.InverseClearMode", "Clear") == "ClearInverse" ? SelectedAllWidthWhenBoth : 90;
+
+        public int SelectedAllWidth
+        {
+            get
+            {
+                return _selectedAllWidth;
+            }
+            set
+            {
+                SetAndNotify(ref _selectedAllWidth, value);
+            }
+        }
+
+        public const int SelectedAllWidthWhenBoth = 85;
+
+        private int _inverseSelectedWidth = 95;
+
+        public int InverseSelectedWidth
+        {
+            get
+            {
+                return _inverseSelectedWidth;
+            }
+            set
+            {
+                SetAndNotify(ref _inverseSelectedWidth, value);
+            }
+        }
+
+        private Visibility _inverseShowVisibility =
+            ViewStatusStorage.Get("GUI.InverseClearMode", "Clear") == "ClearInverse" ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility InverseShowVisibility
+        {
+            get
+            {
+                return _inverseShowVisibility;
+            }
+            set
+            {
+                SetAndNotify(ref _inverseShowVisibility, value);
+            }
+        }
+
+        private Visibility _notInverseShowVisibility =
+            ViewStatusStorage.Get("GUI.InverseClearMode", "Clear") == "ClearInverse" ? Visibility.Collapsed : Visibility.Visible;
+
+        public Visibility NotInverseShowVisibility
+        {
+            get
+            {
+                return _notInverseShowVisibility;
+            }
+            set
+            {
+                SetAndNotify(ref _notInverseShowVisibility, value);
+            }
+        }
+
+        private string _inverseShowText = Convert.ToBoolean(ViewStatusStorage.Get("MainFunction.InverseMode", bool.FalseString)) ? "反选" : "清空";
+
+        public string InverseShowText
+        {
+            get
+            {
+                return _inverseShowText;
+            }
+            set
+            {
+                SetAndNotify(ref _inverseShowText, value);
+            }
+        }
+
+        private string _inverseMenuText = Convert.ToBoolean(ViewStatusStorage.Get("MainFunction.InverseMode", bool.FalseString)) ? "清空" : "反选";
+
+        public string InverseMenuText
+        {
+            get
+            {
+                return _inverseMenuText;
+            }
+            set
+            {
+                SetAndNotify(ref _inverseMenuText, value);
+            }
+        }
+
+        public void ChangeInverseMode()
+        {
+            InverseMode = !InverseMode;
+        }
+
         public void InverseSelected()
         {
-            foreach (var item in TaskItemViewModels)
+            if (_inverseMode)
             {
-                if (item.Name == "无限刷肉鸽")
-                    continue;
-                item.IsChecked = false;
+                foreach (var item in TaskItemViewModels)
+                {
+                    if (item.Name == "无限刷肉鸽")
+                        continue;
+                    item.IsChecked = !item.IsChecked;
+                }
+            }
+            else
+            {
+                foreach (var item in TaskItemViewModels)
+                {
+                    if (item.Name == "无限刷肉鸽")
+                        continue;
+                    item.IsChecked = false;
+                }
             }
         }
 
@@ -759,11 +884,9 @@ namespace MeoAsstGui
                     break;
 
                 case ActionType.ExitSelf:
-                    if (new ToastNotification().CheckToastSystem())
-                    {
-                        ToastNotificationManagerCompat.History.Clear(); //exit似乎不会走bootstapper，单独清一下通知
-                    }
-                    Environment.Exit(0);
+                    // Shutdown 会调用 OnExit 但 Exit 不会
+                    App.Current.Shutdown();
+                    // Enviroment.Exit(0);
                     break;
 
                 case ActionType.ExitEmulator:
@@ -778,11 +901,9 @@ namespace MeoAsstGui
                     {
                         AddLog("模拟器关闭失败", "DarkRed");
                     }
-                    if (new ToastNotification().CheckToastSystem())
-                    {
-                        ToastNotificationManagerCompat.History.Clear(); //exit似乎不会走bootstapper，单独清一下通知
-                    }
-                    Environment.Exit(0);
+                    // Shutdown 会调用 OnExit 但 Exit 不会
+                    App.Current.Shutdown();
+                    // Enviroment.Exit(0);
                     break;
 
                 case ActionType.Shutdown:
@@ -801,12 +922,9 @@ namespace MeoAsstGui
                     break;
 
                 case ActionType.Hibernate:
-                    System.Diagnostics.Process.Start("shutdown.exe", "-h -t 60");
-                    var hibernateResult = _windowManager.ShowMessageBox("已刷完，即将休眠，是否取消？", "提示", MessageBoxButton.OK, MessageBoxImage.Question);
-                    if (hibernateResult == MessageBoxResult.OK)
-                    {
-                        System.Diagnostics.Process.Start("shutdown.exe", "-a");
-                    }
+                    AddLog("已刷完，即将休眠", "DarkRed");
+                    // 休眠不能加时间参数，https://github.com/MaaAssistantArknights/MaaAssistantArknights/issues/1133
+                    System.Diagnostics.Process.Start("shutdown.exe", "-h");
                     break;
 
                 default:

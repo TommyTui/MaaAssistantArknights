@@ -18,6 +18,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using Notification.Wpf.Constants;
 using Notification.Wpf.Controls;
 using Stylet;
@@ -62,6 +63,7 @@ namespace MeoAsstGui
             var trayObj = _container.Get<TrayIcon>();
             trayObj.SetVisible(UseTray);
             trayObj.SetMinimizeToTaskbar(MinimizeToTray);
+            Bootstrapper.SetTrayIconInSettingsViewModel(this);
         }
 
         private List<string> _listTitle = new List<string>();
@@ -147,6 +149,13 @@ namespace MeoAsstGui
                 new CombData { Display = "日服 (YoStarJP)", Value = "YoStarJP" },
                 new CombData { Display = "韩服 (YoStarKR)", Value = "YoStarKR" },
                 new CombData { Display = "繁中服 (txwy)", Value = "txwy" }
+            };
+
+            InverseClearModeList = new List<CombData>
+            {
+                new CombData { Display = "清空", Value = "Clear" },
+                new CombData { Display = "反选", Value = "Inverse" },
+                new CombData { Display = "可切换", Value = "ClearInverse" }
             };
         }
 
@@ -249,23 +258,12 @@ namespace MeoAsstGui
             }
             if (EmulatorAddCommand.Length != 0)
             {
-                string StartCommand = "";
-                if (EmulatorPath.StartsWith("\""))
-                {
-                    StartCommand += EmulatorPath.ToString();
-                }
-                else StartCommand = "\"" + EmulatorPath.ToString() + "\"";
-                StartCommand += " ";
-                StartCommand += EmulatorAddCommand.ToString();
-                Process emuProcess = new Process();
-                emuProcess.StartInfo.FileName = "cmd.exe";
-                emuProcess.StartInfo.RedirectStandardInput = true;
-                emuProcess.StartInfo.UseShellExecute = false;
-                emuProcess.Start();
-                emuProcess.StandardInput.WriteLine(StartCommand);
-                emuProcess.StandardInput.WriteLine("exit");
+                Process.Start(EmulatorPath, EmulatorAddCommand);
             }
-            else Process.Start(EmulatorPath);
+            else
+            {
+                Process.Start(EmulatorPath);
+            }
             int delay = 0;
             if (!int.TryParse(EmulatorWaitSeconds, out delay))
             {
@@ -306,6 +304,7 @@ namespace MeoAsstGui
         public List<CombData> RoguelikeModeList { get; set; }
         public List<CombData> ClientTypeList { get; set; }
         public List<CombData> ConnectConfigList { get; set; }
+        public List<CombData> InverseClearModeList { get; set; }
 
         private int _dormThreshold = Convert.ToInt32(ViewStatusStorage.Get("Infrast.DormThreshold", "30"));
 
@@ -727,7 +726,7 @@ namespace MeoAsstGui
         }
 
         /* 自动公招设置 */
-        private string _recruitMaxTimes = ViewStatusStorage.Get("AutoRecruit.MaxTimes", "3");
+        private string _recruitMaxTimes = ViewStatusStorage.Get("AutoRecruit.MaxTimes", "4");
 
         public string RecruitMaxTimes
         {
@@ -1114,6 +1113,57 @@ namespace MeoAsstGui
                 ViewStatusStorage.Set("GUI.HideUnavailableStage", value.ToString());
                 var mainModel = _container.Get<TaskQueueViewModel>();
                 mainModel.UpdateStageList();
+            }
+        }
+
+        private enum InverseClearType
+        {
+            Clear,
+            Inverse,
+            ClearInverse
+        };
+
+        private InverseClearType _inverseClearMode =
+            InverseClearType.TryParse(ViewStatusStorage.Get("GUI.InverseClearMode", InverseClearType.Clear.ToString()),
+                out InverseClearType temp)
+            ? temp : InverseClearType.Clear;
+
+        public string InverseClearMode
+        {
+            get { return _inverseClearMode.ToString(); }
+            set
+            {
+                bool parsed = InverseClearType.TryParse(value, out InverseClearType tempEnumValue);
+                if (!parsed)
+                {
+                    return;
+                }
+                SetAndNotify(ref _inverseClearMode, tempEnumValue);
+                ViewStatusStorage.Set("GUI.InverseClearMode", value);
+
+                var taskQueueModel = _container.Get<TaskQueueViewModel>();
+                switch (tempEnumValue)
+                {
+                    case InverseClearType.Clear:
+                        taskQueueModel.InverseMode = false;
+                        taskQueueModel.InverseShowVisibility = Visibility.Collapsed;
+                        taskQueueModel.NotInverseShowVisibility = Visibility.Visible;
+                        taskQueueModel.SelectedAllWidth = 90;
+                        break;
+
+                    case InverseClearType.Inverse:
+                        taskQueueModel.InverseMode = true;
+                        taskQueueModel.InverseShowVisibility = Visibility.Collapsed;
+                        taskQueueModel.NotInverseShowVisibility = Visibility.Visible;
+                        taskQueueModel.SelectedAllWidth = 90;
+                        break;
+
+                    case InverseClearType.ClearInverse:
+                        taskQueueModel.InverseShowVisibility = Visibility.Visible;
+                        taskQueueModel.NotInverseShowVisibility = Visibility.Collapsed;
+                        taskQueueModel.SelectedAllWidth = TaskQueueViewModel.SelectedAllWidthWhenBoth;
+                        break;
+                }
             }
         }
     }

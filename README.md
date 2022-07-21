@@ -49,6 +49,12 @@ MAA 的意思是 MAA Assistant Arknights
 
 ## 下载地址
 
+***第一次使用请下载 `MaaBundle-vX.Y.Z.zip`***
+
+***第一次使用请下载 `MaaBundle-vX.Y.Z.zip`***
+
+***第一次使用请下载 `MaaBundle-vX.Y.Z.zip`***
+
 [稳定版](https://github.com/MaaAssistantArknights/MaaAssistantArknights/releases/latest)  
 [测试版](https://github.com/MaaAssistantArknights/MaaAssistantArknights/releases)  
 
@@ -82,7 +88,7 @@ MAA 的意思是 MAA Assistant Arknights
 - 国际服（美服）  
   支持基本的刷理智、公招识别、访问好友、领取奖励功能，请参考 [说明](resource/global/YoStarEN/readme.md)
 - 日服  
-  支持基本的刷理智功能，请参考 [说明](resource/global/YoStarJP/readme.md)
+  支持基本的刷理智、公招识别、访问好友、领取奖励功能，请参考 [说明](resource/global/YoStarJP/readme.md)
 - 韩服  
   支持基本的刷理智功能，请参考 [说明](resource/global/YoStarKR/readme.md)
 - 繁中服  
@@ -164,7 +170,7 @@ MAA 的意思是 MAA Assistant Arknights
 ## 广告
 
 [用户交流群（Telegram 群）](https://t.me/+Mgc2Zngr-hs3ZjU1)  
-自动战斗 JSON 作业分享: <https://www.prts.plus> , [QQ 群](https://jq.qq.com/?_wv=1027&k=1giyMpPb)  
+自动战斗 JSON 作业分享: <https://www.prts.plus> , [QQ 一群](https://jq.qq.com/?_wv=1027&k=1giyMpPb)（已满），[QQ 二群](https://jq.qq.com/?_wv=1027&k=R3oleoKc)，[QQ 三群](https://jq.qq.com/?_wv=1027&k=mKdOnhWV)    
 [Bilibili 直播间](https://live.bilibili.com/2808861)：每晚直播敲代码，近期很长一段时间应该都是在写本软件~  
 [舟无关技术交流 & 吹水群（QQ 群）](https://jq.qq.com/?_wv=1027&k=ypbzXcA2)：内卷地狱！  
 [开发者群（QQ 群）](https://jq.qq.com/?_wv=1027&k=JM9oCk3C)  
